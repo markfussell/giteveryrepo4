@@ -18,9 +18,9 @@
   
   "Mappings" : {
     "TemplateConstant" : {
-       "stackkey" : { "value" : "GitEverythingServer3" },
+       "stackkey" : { "value" : "GitEverythingServer4" },
        "initgitrepo" : { "value" : "giteveryrepo4" },
-       "nodepart" : { "value" : "applbpart" },
+       "nodepart" : { "value" : "applbpart" }
     },
 
     "AWSInstanceType2Arch" : {
