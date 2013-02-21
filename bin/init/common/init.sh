@@ -7,6 +7,29 @@ echo -e "AWSAccessKeyId=`cat /root/nodeinfo/access_key.txt`\nAWSSecretKey=`cat /
 chmod 600 ~/.aws/awscfn_config.txt
 
 #================================
+#=== Get latest tools
+#================================
+
+pushd /opt
+wget http://s3.amazonaws.com/ec2-downloads/ec2-api-tools.zip
+wget https://s3.amazonaws.com/cloudformation-cli/AWSCloudFormation-cli.zip
+Ê
+unzip ec2-api-tools.zip
+unzip AWSCloudFormation-cli.zip
+Ê
+ln -sf /opt/ec2-api-tools-* /opt/ec2-api-tools
+ln -sf /opt/AWSCloudFormation-* /opt/AWSCloudFormation
+
+popd
+
+#================================
+#=== Setup link to new tools
+#================================
+
+cp ./bin/init/common/.bashrc /root/.bashrc
+source /root/.bashrc
+
+#================================
 #=== Have a preference that crons
 #=== all go through a single file
 #================================
