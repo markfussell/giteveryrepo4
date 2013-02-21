@@ -18,7 +18,7 @@ unzip ec2-api-tools.zip
 unzip AWSCloudFormation-cli.zip
 Ê
 ln -sf /opt/ec2-api-tools-* /opt/ec2-api-tools
-ln -sf /opt/AWSCloudFormation-* /opt/AWSCloudFormation
+ln -sf /opt/AWSCloudFormation-1* /opt/AWSCloudFormation
 
 popd
 
