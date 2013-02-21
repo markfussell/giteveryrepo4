@@ -1,4 +1,10 @@
+#================================
+#=== Setup CFN credentials
+#================================
 
+mkdir -p ~/.aws/
+echo "AWSAccessKeyId=`cat /root/nodeinfo/access_key.txt`\nAWSSecretKey=`cat /root/nodeinfo/secret_key.txt`\n" > ~/.aws/awscfn_config.txt
+chmod 600 ~/.aws/awscfn_config.txt
 
 #================================
 #=== Have a preference that crons
