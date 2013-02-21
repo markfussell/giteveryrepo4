@@ -59,7 +59,7 @@
           "PolicyName": "root",
           "PolicyDocument": { "Statement":[{
               "Effect": "Allow",
-              "NotAction": "iam:*",
+              "Action": "*",
               "Resource": "*"
           }]}
         }]
