@@ -9,22 +9,46 @@ export TSS=`date +%Y%m%d-%H%M%S`
 export KEYNAME=`cat /root/nodeinfo/keyname.txt`
 export TEMPLATE_PATH=it/aws/cloudformation
 
-#=====================
+#=======================
 #=== Security Groups
-#=====================
+#=======================
+
+
+#===================
+#=== testdeployment
+#===================
 
 ec2-create-group testdeployment -d  testdeployment
 export OWNER=`ec2-describe-group | grep GROUP | head -n 1 | cut -f 3`
 
+#Enable SSH In
 ec2-authorize testdeployment -p 22 -s 0.0.0.0/0
-ec2-authorize testdeployment -o testdeployment -u ${OWNER} -p -1
 
-ec2-create-group appnode        -d  appnode
+#Enable deployment to talk to itself
+ec2-authorize testdeployment -o testdeployment -u ${OWNER}
+
+#===================
+#=== applbnode
+#===================
 
 ec2-create-group applbnode      -d  applbnode
 ec2-authorize applbnode -p 80 -s 0.0.0.0/0
 
+#===================
+#=== appnode
+#===================
+
+ec2-create-group appnode        -d  appnode
+
+#===================
+#=== presencenode
+#===================
+
 ec2-create-group presencenode   -d  presencenode
+
+#===================
+#=== riaknode
+#===================
 
 ec2-create-group riaknode       -d  riaknode
 

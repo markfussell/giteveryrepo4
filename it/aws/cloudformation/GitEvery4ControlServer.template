@@ -18,7 +18,7 @@
   
   "Mappings" : {
     "TemplateConstant" : {
-       "stackkey" : { "value" : "GitEvery4ControlServer" },
+       "stacktype" : { "value" : "GitEvery4ControlServer" },
        "initgitrepo" : { "value" : "giteveryrepo4" },
        "nodepart" : { "value" : "controlnode" }
     },
@@ -98,7 +98,7 @@
       "Type" : "AWS::AutoScaling::AutoScalingGroup",
       "Properties" : {
         "Tags": [
-            { "Key": "stackkey", "Value": { "Fn::FindInMap" : [ "TemplateConstant", "stackkey", "value" ] }, "PropagateAtLaunch" : "true" },
+            { "Key": "stacktype", "Value": { "Fn::FindInMap" : [ "TemplateConstant", "stacktype", "value" ] }, "PropagateAtLaunch" : "true" },
             { "Key": "nodepart", "Value": { "Fn::FindInMap" : [ "TemplateConstant", "nodepart", "value" ] }, "PropagateAtLaunch" : "true" }
         ],
         "AvailabilityZones" : { "Fn::GetAZs" : "" },
@@ -121,9 +121,9 @@
             },
 
             "files" : {
-                "/root/nodeinfo/stackkey.txt" : {
+                "/root/nodeinfo/stacktype.txt" : {
                     "content" : { "Fn::Join" : ["", [
-                        { "Fn::FindInMap" : [ "TemplateConstant", "stackkey", "value" ] },
+                        { "Fn::FindInMap" : [ "TemplateConstant", "stacktype", "value" ] },
                         ""
                     ]]},
                     "mode"  : "000700",
@@ -210,9 +210,6 @@
           "cd /root/gitrepo/`cat /root/nodeinfo/initgitrepo.txt` \n",
           "include () { if [[ -f \"$1\" ]]; then source \"$1\"; else echo \"Skipped missing: $1\"; fi } \n ",
           "include bin/init/common/init.sh \n",
-          "include bin/init/part/`cat /root/nodeinfo/nodepart.txt`/init.sh \n",
-          "include bin/init/stack/`cat /root/nodeinfo/stackkey.txt`/init.sh \n",
-          "include bin/init/stack/`cat /root/nodeinfo/stackkey.txt`/part/`cat /root/nodeinfo/nodepart.txt`/init.sh \n",
 
           "# All is well so signal success\n",
           "/opt/aws/bin/cfn-signal -e 0 -r \"LAMP Stack setup complete\" '", { "Ref" : "WaitHandle" }, "'\n",

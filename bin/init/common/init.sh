@@ -44,3 +44,15 @@ MAILTO=""
 * * * * *  /root/bin/cron_1m.sh
 EOS
 
+
+#=======================================
+#=== Do more specific initialization
+#=======================================
+
+include () { if [[ -f "$1" ]]; then source "$1"; else echo "Skipped missing: $1"; fi }
+
+include bin/init/part/`cat /root/nodeinfo/nodepart.txt`/init.sh
+include bin/init/stacktype/`cat /root/nodeinfo/stacktype.txt`/init.sh
+include bin/init/stacktype/`cat /root/nodeinfo/stacktype.txt`/part/`cat /root/nodeinfo/nodepart.txt`/init.sh
+
+
