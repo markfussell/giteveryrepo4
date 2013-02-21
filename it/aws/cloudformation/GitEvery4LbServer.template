@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion" : "2010-09-09",
   
-  "Description" : "GitEverythingServer4.template -- Upload from https://github.com/markfussell/giteveryrepo4/blob/master/it/aws/cloudformation/GitEverythingServer4.template",
+  "Description" : "GitEvery4LbServer.template -- Upload from https://github.com/markfussell/giteveryrepo4/blob/master/it/aws/cloudformation/GitEvery4LbServer.template",
 
   "Parameters" : {
       
@@ -18,9 +18,10 @@
   
   "Mappings" : {
     "TemplateConstant" : {
-       "stackkey" : { "value" : "GitEverythingServer4" },
+       "stackkey" : { "value" : "GitEvery4LbServer" },
        "initgitrepo" : { "value" : "giteveryrepo4" },
-       "nodepart" : { "value" : "applbpart" }
+       "nodepart" : { "value" : "applbnode" },
+       "deployment" : { "value" : "testdeployment" }
     },
 
     "AWSInstanceType2Arch" : {
@@ -58,9 +59,9 @@
         "Policies": [{
           "PolicyName": "root",
           "PolicyDocument": { "Statement":[{
-            "Effect":"Allow",
-            "Action":"cloudformation:DescribeStackResource",
-            "Resource":"*"
+              "Effect": "Allow",
+              "NotAction": "iam:*",
+              "Resource": "*"
           }]}
         }]
       }
@@ -71,33 +72,6 @@
       "Properties" : {
         "UserName" : {"Ref": "CfnUser"}
       }
-    },
-
-    "PrimarySecurityGroup":{
-        "Type":"AWS::EC2::SecurityGroup",
-        "Properties":{
-            "GroupDescription":"PrimarySecurityGroup",
-            "SecurityGroupIngress":[
-                {
-                    "IpProtocol":"icmp",
-                    "FromPort":"-1",
-                    "ToPort":"-1",
-                    "CidrIp":"0.0.0.0/0"
-                },
-                {
-                    "IpProtocol":"tcp",
-                    "FromPort":"80",
-                    "ToPort":"80",
-                    "CidrIp":"0.0.0.0/0"
-                },
-                {
-                    "IpProtocol":"tcp",
-                    "FromPort":"22",
-                    "ToPort":"22",
-                    "CidrIp":"0.0.0.0/0"
-                }
-            ]
-        }
     },
 
     "PrimaryServerGroup" : {
@@ -153,7 +127,25 @@
                      "mode"  : "000700",
                      "owner" : "root",
                      "group" : "root"
-                 }
+                 },
+                 "/root/nodeinfo/access_key.txt" : {
+                     "content" : { "Fn::Join" : ["", [
+                         { "Ref" : "HostKeys" },
+                         ""
+                     ]]},
+                     "mode"  : "000700",
+                     "owner" : "root",
+                     "group" : "root"
+                 },
+                  "/root/nodeinfo/secret_key.txt" : {
+                      "content" : { "Fn::Join" : ["", [
+                          {"Fn::GetAtt": ["HostKeys", "SecretAccessKey"]},
+                          ""
+                      ]]},
+                      "mode"  : "000700",
+                      "owner" : "root",
+                      "group" : "root"
+                  }
              }
           }
         }
@@ -162,7 +154,7 @@
         "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
                           { "Fn::FindInMap" : [ "AWSInstanceType2Arch", "m1.small", "Arch" ] } ] },
         "InstanceType"   : "m1.small",
-        "SecurityGroups" : [ {"Ref" : "PrimarySecurityGroup"} ],
+        "SecurityGroups" : [ { "Fn::FindInMap" : [ "TemplateConstant", "deployment", "value" ] }, { "Fn::FindInMap" : [ "TemplateConstant", "nodepart", "value" ] } ],
         "KeyName"        : { "Ref" : "KeyName" },
         "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
           "#!/bin/bash -v\n",
