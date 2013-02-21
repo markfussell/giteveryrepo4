@@ -3,7 +3,7 @@
 #================================
 
 mkdir -p ~/.aws/
-echo "AWSAccessKeyId=`cat /root/nodeinfo/access_key.txt`\nAWSSecretKey=`cat /root/nodeinfo/secret_key.txt`\n" > ~/.aws/awscfn_config.txt
+echo -e "AWSAccessKeyId=`cat /root/nodeinfo/access_key.txt`\nAWSSecretKey=`cat /root/nodeinfo/secret_key.txt`\n" > ~/.aws/awscfn_config.txt
 chmod 600 ~/.aws/awscfn_config.txt
 
 #================================
