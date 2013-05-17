@@ -1,3 +1,11 @@
+#!/bin/bash
+#============================================================
+#=== The master initialization of all nodes
+#============================================================
+
+export INITDIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../"
+export DIR=${INITDIR}
+
 #================================
 #=== Setup CFN credentials
 #================================
@@ -13,10 +21,10 @@ chmod 600 ~/.aws/awscfn_config.txt
 pushd /opt
 wget http://s3.amazonaws.com/ec2-downloads/ec2-api-tools.zip
 wget https://s3.amazonaws.com/cloudformation-cli/AWSCloudFormation-cli.zip
-Ê
+
 unzip ec2-api-tools.zip
 unzip AWSCloudFormation-cli.zip
-Ê
+
 ln -sf /opt/ec2-api-tools-* /opt/ec2-api-tools
 ln -sf /opt/AWSCloudFormation-1* /opt/AWSCloudFormation
 
@@ -44,6 +52,11 @@ MAILTO=""
 * * * * *  /root/bin/cron_1m.sh
 EOS
 
+#=======================================
+#=== NTP
+#=======================================
+
+source ${DIR}common/installNtp.sh
 
 #=======================================
 #=== Do more specific initialization
