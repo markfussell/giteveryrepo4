@@ -128,6 +128,15 @@
                      "owner" : "root",
                      "group" : "root"
                  },
+                "/root/nodeinfo/deployment.txt" : {
+                    "content" : { "Fn::Join" : ["", [
+                        { "Fn::FindInMap" : [ "TemplateConstant", "deployment", "value" ] },
+                        ""
+                    ]]},
+                    "mode"  : "000700",
+                    "owner" : "root",
+                    "group" : "root"
+                },
                  "/root/nodeinfo/access_key.txt" : {
                      "content" : { "Fn::Join" : ["", [
                          { "Ref" : "HostKeys" },
